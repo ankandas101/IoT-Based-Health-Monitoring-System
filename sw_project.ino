@@ -223,9 +223,9 @@ int getHW827(){
   int oxigen = pulseSensor.getBeatsPerMinute();
   if (pulseSensor.sawStartOfBeat()) 
   {
-    return oxigen = rand() % 5 + 92;
+    return oxigen = oxigen.currentValue;
   }else {
-  return oxigen = 0;
+  return -100;
   }
 }
 
@@ -242,10 +242,20 @@ float readDHTHumidity() {
 
 int calculateBPM () 
 {  
-   // Seed the random number generator
+    pulseValue = analogRead(pulsePin);
+
+  // Detect the pulse
+  if (pulseValue > 600) {
+    digitalWrite(ledPin, HIGH); // turn on the LED
+    delay(100); // wait for a short time
+    digitalWrite(ledPin, LOW); // turn off the LED
+    bpm = 60000 / pulseValue; // calculate the heart rate in beats per minute
+    Serial.print("Heart rate: ");
+    Serial.print(bpm);
+    Serial.println(" BPM");
+
     srand(time(NULL));
-    // Generate a random number between 70 and 80
-    return rand() % 5 + 72;
+    return bpm ;
   }
 void checkWiFi() {
   while (WiFi.status() != WL_CONNECTED) {
